@@ -1,68 +1,103 @@
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+
+const menuItems = [
+  { label: "Home", path: "/" },
+  { label: "Shop", path: "/shop" },
+  { label: "Size", path: "/size" },
+  { label: "Cart", path: "/cart" },
+  { label: "Tracking", path: "/tracking" },
+  { label: "Account", path: "/account", icon: "ri-user-line" },
+];
+
+// Class untuk link: aktif = garis bawah
+const linkClass = ({ isActive }) =>
+  `flex items-center gap-1 text-base uppercase tracking-wide ${isActive ? "text-black" : "text-zinc-700"}`;
+
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <header>
       {/* Header */}
       <div className="bg-black text-white text-center py-1">
-        <p className="text-xs md:text-sm font-medium md:text">
+        <p className="font-montserrat text-xs md:text-sm font-medium">
           Kandangan Boys 1950 | +64294 Krue
         </p>
       </div>
       {/* Header */}
 
-      <div className="border-b border-black/30">
+      {/* Navbar */}
+      <div
+        className={`relative border-b transition-colors duration-300 md:border-black/10 ${isOpen ? "border-transparent" : "border-black/10"}`}
+      >
+        {/* Menu Dekstop */}
         <div className="navbar px-4 py-3 -mt-2 flex items-center justify-between">
           {/* Logo */}
           <div className="logo flex items-center gap-x-2">
             <img
               src="/assets/Macan.png"
               alt="Logo Eastern Fifty"
-              className="h-8 md:h10 lg:h-12 w-auto shrink-0"
+              className="h-8 md:h-10 lg:h-12 w-auto shrink-0"
             />
-            <h1 className="font-lokal md:text-4xl text-3xl lg:text-5xl font-medium leading-none -mt-1x text-black">
+            <h1 className="font-lokal lg:text-5xl md:text-4xl text-3xl font-medium leading-none -mt-1x text-black">
               Eastern Fifty
             </h1>
           </div>
           {/* Logo */}
 
-          {/* Menu */}
-          <div>
-            <ul className="menu hidden md:flex items-center   md:gap-8 lg:gap-10 mr-2">
-              <li>
-                <a href="#" className="sm:text-lg text-base font-medium">
-                  About
-                </a>
+          <ul className="menu hidden md:flex items-center md:gap-8 lg:gap-10 mr-2">
+            {menuItems.map((item) => (
+              <li key={item.path}>
+                <NavLink
+                  to={item.path}
+                  className={(state) =>
+                    `${linkClass(state)} md:text-xs lg:text-sm text-base font-medium`
+                  }
+                >
+                  {item.icon && <i className={`${item.icon} ri-lg`}></i>}
+                  {item.label}
+                </NavLink>
               </li>
-              <li>
-                <a href="#" className="sm:text-lg text-base font-medium">
-                  Shop
-                </a>
-              </li>
-              <li>
-                <a href="#" className="sm:text-lg text-base font-medium">
-                  Size
-                </a>
-              </li>
-              <li>
-                <a href="#" className="sm:text-lg text-base font-medium">
-                  Chart
-                </a>
-              </li>
-              <li>
-                <a href="#" className="sm:text-lg text-base font-medium">
-                  Tracking
-                </a>
-              </li>
-            </ul>
-          </div>
-          {/* Menu */}
+            ))}
+          </ul>
 
           {/* Tombol Ikon Menu */}
-          <button className="md:hidden p-2" aria-label="buka menu">
-            <i className="ri-menu-line ri-lg"></i>
+          <button
+            className="md:hidden p-2"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "tutup menu" : "buka menu"}
+          >
+            <i
+              className={`${isOpen ? "ri-close-line" : "ri-menu-line"} ri-lg`}
+            ></i>
           </button>
           {/* Tombol Ikon Menu */}
         </div>
+        {/* Menu Dekstop*/}
+
+        {/* Sidebar */}
+        <ul
+          className={`font-medium md:hidden absolute inset-x-0 top-full z-50 flex flex-col items-center gap-8 bg-zinc-100 pb-10 pt-4 shadow-lg transition-[transform,opacity] duration-300 ease-in-out ${isOpen ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0 pointer-events-none"}`}
+        >
+          {menuItems.map((item) => (
+            <li key={item.path}>
+              <NavLink
+                to={item.path}
+                end={item.path === "/"}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `flex items-center gap-1 text-base uppercase tracking-wide ${isActive ? "text-black" : "text-zinc-700"}`
+                }
+              >
+                {item.label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+        {/* Sidebar */}
       </div>
+      {/* Navbar */}
     </header>
   );
 };
