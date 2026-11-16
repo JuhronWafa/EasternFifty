@@ -10,10 +10,10 @@ function Home() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="grid grid-cols-1 md:min-h-[580px] md:grid-cols-[2fr_3fr]">
+      <section className="grid grid-cols-1 md:min-h-145 bg-black lg:grid-cols-[2fr_3fr]">
         {/* Panel Hitam - Kiri */}
         <div className="flex  flex-col justify-between bg-black px-6 py-8 text-zinc-100 md:px-10">
-          <p className="text-[9px] uppercase tracking-widest md:text-[10px] lg:text-xs">
+          <p className="text-[9px] uppercase tracking-widest md:text-[10px] lg:text-xs mb-5">
             Drop 01 / Rooted In 1950
           </p>
 
@@ -38,20 +38,47 @@ function Home() {
               <i className="ri-arrow-right-up-line ri-lg"></i>
             </Link>
           </div>
-          <p className="text-[10px] uppercase tracking-wider text-zinc-400">
+          <p className="text-[10px] uppercase tracking-wider text-zinc-400 -mt-4 md:mt-6">
             From East Kediri | +64294
           </p>
         </div>
-      </section>
+        {/* Panel Hitam - Kiri */}
 
-      <section className="flex items-center gap-8 overflow-x-hidden whitespace-nowrap bg-gray-500 px-6 py-6 text-zinc-100">
-        {marqueeItems.map((text) => (
-          <div key={text} className="flex items-center gap-8">
-            <span className="font-anton text-lg uppercase">{text}</span>
-            <span aria-hidden="true">✦</span>
-          </div>
-        ))}
+        {/* Foto - Kanan */}
+        <div className="relative aspect-[4/3] bg-black md:aspect-[16/10] lg:aspect-auto overflow-hidden">
+          <img
+            src="/assets/Hero.png"
+            alt="Skena Football"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+          <div className="absolute inset-0 left-0 hidden w-16 bg-linear-to-r from-black to-transparent lg:block"></div>
+        </div>
+        {/* Foto - Kanan */}
       </section>
+      {/* Hero Section */}
+
+      {/* Footer Home */}
+      <section className="group overflow-hidden bg-gray-500 py-6 text-zinc-100">
+        <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none">
+          {[0, 1].map((half) => (
+            <div
+              key={half}
+              aria-hidden={half === 1}
+              className="flex shrink-0 items-center"
+            >
+              {[...marqueeItems, ...marqueeItems].map((text, i) => (
+                <div key={i} className="flex items-center gap-8 px-4">
+                  <span className="font-anton text-xs md:text-lg whitespace-nowrap uppercase">
+                    {text}
+                  </span>
+                  <span aria-hidden="true">✦</span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </section>
+      {/* Footer Home */}
     </main>
   );
 }
