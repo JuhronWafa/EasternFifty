@@ -1,47 +1,11 @@
 import { Link } from "react-router-dom";
+import { products } from "../data/products";
+import ProductCard from "../components/ProductCard";
 
 const marqueeItems = [
   "K-Boys 1950",
   "From the Eastern tip of Kediri to Persik Kediri",
   "+64294 krue",
-];
-
-const products = [
-  {
-    id: 1,
-    name: "Terrace stripe jersey",
-    price: "£68",
-    variant: "Black / Ecru",
-    badge: "Bestseller",
-    image: "/assets/products/Jersey.png",
-    colors: ["#111111", "#ece8dc"],
-  },
-  {
-    id: 2,
-    name: "Away days track jacket",
-    price: "£110",
-    variant: "Olive / Ecru",
-    badge: "New",
-    image: "/assets/products/TrackJacket.png",
-    colors: ["#6b7a5a", "#111111"],
-  },
-  {
-    id: 3,
-    name: "Club heavyweight tee",
-    price: "£42",
-    variant: "Chalk / Black",
-    badge: "New",
-    image: "/assets/products/Tee.png",
-    colors: ["#ece8dc", "#111111"],
-  },
-  {
-    id: 4,
-    name: "90-minute track pant",
-    price: "£85",
-    variant: "Black / Ecru",
-    image: "/assets/products/TrackPant.png",
-    colors: ["#111111", "#6b7a5a"],
-  },
 ];
 
 function Home() {
@@ -95,9 +59,8 @@ function Home() {
       </section>
       {/* Hero Section */}
 
-      {/* Footer Home */}
+      {/* Scrolling Marquee */}
       <section className="group overflow-hidden bg-gray-500 py-3 text-zinc-100">
-        {/* py dari 6 menjadi 3 */}
         <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none">
           {[0, 1].map((half) => (
             <div
@@ -117,7 +80,7 @@ function Home() {
           ))}
         </div>
       </section>
-      {/* Footer Home */}
+      {/* Scrolling Marquee */}
 
       {/* Shop Section */}
       <section className="px-6 py-12 md:px-10 md:py-12">
@@ -142,41 +105,21 @@ function Home() {
         </div>
 
         <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {products.map((item) => (
-            <article key={item.id}>
-              <div className="relative aspect-4/5 overflow-hidden bg-stone-200">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="h-full w-full object-contain"
-                />
-                {item.badge && (
-                  <span className="absolute left-3 top-3 bg-zinc-100 px-3 py-1.5 text-[10px] uppercase">
-                    {item.badge}
-                  </span>
-                )}
-              </div>
-
-              <div className="mt-4 flex items-start justify-between gap-2 text-sm">
-                <h3 className="font-medium">{item.name}</h3>
-                <span>{item.price}</span>
-              </div>
-              <p className="mt-1 text-xs text-zinc-500">{item.variant}</p>
-
-              <div className="mt-3 flex gap-1.5">
-                {item.colors.map((color) => (
-                  <span
-                    key={color}
-                    className="h-2.5 w-2.5"
-                    style={{ backgroundColor: color }}
-                  ></span>
-                ))}
-              </div>
-            </article>
+          {products.slice(0, 4).map((item) => (
+            <ProductCard key={item.id} item={item} />
           ))}
         </div>
       </section>
       {/* Shop Section */}
+
+      {/* Button HP untuk Shop Section */}
+      <Link
+        to="/shop"
+        className="mx-auto -mt-2 mb-6 flex w-fit items-center gap-2 text-[10px] font-medium uppercase md:hidden"
+      >
+        Shop all products <i className="ri-arrow-right-up-line ri-lg"></i>
+      </Link>
+      {/* Button HP untuk Shop Section */}
     </main>
   );
 }
