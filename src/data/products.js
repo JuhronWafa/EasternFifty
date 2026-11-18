@@ -1,7 +1,7 @@
-export const products = [
+const baseProducts = [
   {
     id: 1,
-    name: "Terrace stripe jersey",
+    name: "Terrace Stripe Jersey",
     price: "$68",
     variant: "Black / Ecru",
     badge: "Bestseller",
@@ -10,7 +10,7 @@ export const products = [
   },
   {
     id: 2,
-    name: "Away days track jacket",
+    name: "Away Days Track Jacket",
     price: "$110",
     variant: "Olive / Ecru",
     badge: "New",
@@ -19,7 +19,7 @@ export const products = [
   },
   {
     id: 3,
-    name: "Club heavyweight tee",
+    name: "Club Heavyweight Tee",
     price: "$42",
     variant: "Chalk / Black",
     badge: "New",
@@ -28,7 +28,7 @@ export const products = [
   },
   {
     id: 4,
-    name: "90-minute track pant",
+    name: "90-Minute Track Pant",
     price: "$85",
     variant: "Black / Ecru",
     image: "/assets/products/TrackPant.png",
@@ -38,7 +38,7 @@ export const products = [
   //   Product Baru
   {
     id: 5,
-    name: "Stadium heavyweight hoodie",
+    name: "Stadium Heavyweight Hoodie",
     price: "$88",
     variant: "Black / Ecru",
     badge: "New",
@@ -47,7 +47,7 @@ export const products = [
   },
   {
     id: 6,
-    name: "Terrace long sleeve",
+    name: "Terrace Long Sleeve",
     price: "$54",
     variant: "Ecru / Black",
     image: "/assets/products/LongSleeve.png",
@@ -55,7 +55,7 @@ export const products = [
   },
   {
     id: 7,
-    name: "Training football shorts",
+    name: "Training Football Shorts",
     price: "$48",
     variant: "Black / Ecru",
     image: "/assets/products/Shorts.png",
@@ -63,7 +63,7 @@ export const products = [
   },
   {
     id: 8,
-    name: "Matchday windbreaker",
+    name: "Matchday Windbreaker",
     price: "$95",
     variant: "Olive / Black",
     badge: "New",
@@ -72,7 +72,7 @@ export const products = [
   },
   {
     id: 9,
-    name: "Supporters ribbed beanie",
+    name: "Supporters Ribbed Beanie",
     price: "$32",
     variant: "Black / Ecru",
     image: "/assets/products/Tshirt.png",
@@ -80,7 +80,7 @@ export const products = [
   },
   {
     id: 10,
-    name: "Club crest cap",
+    name: "Club Crest Cap",
     price: "$38",
     variant: "Black / Olive",
     image: "/assets/products/Cap.png",
@@ -88,7 +88,7 @@ export const products = [
   },
   {
     id: 11,
-    name: "Matchday supporters scarf",
+    name: "Matchday Supporters Scarf",
     price: "$35",
     variant: "Black / Ecru",
     image: "/assets/products/Scarf.png",
@@ -96,10 +96,29 @@ export const products = [
   },
   {
     id: 12,
-    name: "Touchline socks",
+    name: "Touchline Socks",
     price: "$24",
     variant: "White / Black",
     image: "/assets/products/Socks.png",
     colors: ["#ece8dc", "#111111"],
   },
 ];
+
+const APPAREL = ["S", "M", "L", "XL"];
+
+const extra = {
+  1: { category: "Jerseys", sizes: APPAREL },
+  2: { category: "Jackets", sizes: APPAREL },
+  3: { category: "T-Shirts", sizes: APPAREL },
+  4: { category: "Pants", sizes: APPAREL },
+  5: { category: "Hoodies", sizes: APPAREL },
+  6: { category: "T-Shirts", sizes: APPAREL },
+  7: { category: "Shorts", sizes: APPAREL },
+  8: { category: "Jackets", sizes: APPAREL },
+  9: { category: "Accessories", sizes: [] },
+  10: { category: "Accessories", sizes: [] },
+  11: { category: "Accessories", sizes: [] },
+  12: { category: "Accessories", sizes: [] },
+};
+
+export const products = baseProducts.map((p) => ({ ...p, ...extra[p.id] }));

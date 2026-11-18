@@ -82,14 +82,45 @@ function Home() {
       </section>
       {/* Scrolling Marquee */}
 
+      {/* Manifesto Section */}
+      <section className="relative flex items-center overflow-hidden px-6 py-8 md:px-10 md:py-10 md:min-h-75 lg:min-h-125">
+        <img
+          src="/assets/Tiger.png"
+          alt="Siluet"
+          aria-hidden="true"
+          className="absolute inset-0 z-0 h-full w-full object-cover object-center opacity-10"
+        />
+        {/* absolute mt-4 inset-0 h-full w-full object-contain object-top opacity-10 lg:object-cover lg:object-center */}
+
+        <div className="absolute inset-0 z-0 bg-zinc-100/30"></div>
+
+        <div className="relative z-10 grid w-full grid-cols-1 gap-4 md:grid-cols-[1fr_2fr] md:gap-10">
+          <p className="text-[10px] uppercase tracking-widest text-zinc-700 md:text-xs">
+            01 - Our Philosophy
+          </p>
+
+          <div>
+            <h2 className="font-anton text-3xl uppercase leading-[0.95] md:text-5xl lg:text-[80px]">
+              No Loud Crests. <br /> Just Pure Pride.
+            </h2>
+            <p className="mt-4 max-w-md text-xs text-zinc-700 md:mt-5 md:text-sm lg:text-base">
+              Born from long rides to the stadium, matchday rituals, and the
+              streets in between. We craft everyday uniforms for a loyalty that
+              never clocks off. Rooted in Kediri +64294.
+            </p>
+          </div>
+        </div>
+      </section>
+      {/* Manifesto Section */}
+
       {/* Shop Section */}
-      <section className="px-6 py-12 md:px-10 md:py-12">
+      <section className="px-6 pt-4 pb-8 md:px-10 md:pt-6 md:pb-12">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="text-[10px] uppercase tracking-widest text-zinc-500 md:text-xs">
+            <p className="text-[10px] uppercase tracking-widest text-zinc-700 md:text-xs">
               The latest drop
             </p>
-            <h2 className="mt-4 font-anton text-3xl uppercase leading-none md:text-6xl">
+            <h2 className="mt-4 font-anton text-3xl uppercase leading-none md:text-5xl lg:text-6xl">
               The new rotation.
             </h2>
             <p className="mt-2 text-sm text-zinc-600">
