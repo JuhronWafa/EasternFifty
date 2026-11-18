@@ -90,7 +90,6 @@ function Home() {
           aria-hidden="true"
           className="absolute inset-0 z-0 h-full w-full object-cover object-center opacity-10"
         />
-        {/* absolute mt-4 inset-0 h-full w-full object-contain object-top opacity-10 lg:object-cover lg:object-center */}
 
         <div className="absolute inset-0 z-0 bg-zinc-100/30"></div>
 

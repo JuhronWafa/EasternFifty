@@ -115,7 +115,7 @@ const extra = {
   6: { category: "T-Shirts", sizes: APPAREL },
   7: { category: "Shorts", sizes: APPAREL },
   8: { category: "Jackets", sizes: APPAREL },
-  9: { category: "Accessories", sizes: [] },
+  9: { category: "Jerseys", sizes: APPAREL },
   10: { category: "Accessories", sizes: [] },
   11: { category: "Accessories", sizes: [] },
   12: { category: "Accessories", sizes: [] },
