@@ -29,10 +29,10 @@ const Navbar = () => {
 
       {/* Navbar */}
       <div
-        className={`relative border-b transition-colors duration-300 md:border-black/10 ${isOpen ? "border-transparent" : "border-black/10"}`}
+        className={`relative border-b transition-colors duration-300 md:border-[rgba(0,0,0,0.1)] ${isOpen ? "border-transparent" : "border-[rgba(0,0,0,0.1)]"}`}
       >
         {/* Menu Dekstop */}
-        <div className="navbar px-4 py-3 -mt-2 flex items-center justify-between">
+        <div className="navbar px-4 py-3 -mt-1 flex items-center justify-between">
           {/* Logo */}
           <div className="logo flex items-center gap-x-2">
             <img
@@ -40,7 +40,7 @@ const Navbar = () => {
               alt="Logo Eastern Fifty"
               className="h-8 md:h-10 lg:h-12 w-auto shrink-0"
             />
-            <h1 className="font-lokal lg:text-5xl md:text-4xl text-3xl font-medium leading-none -mt-1x text-black">
+            <h1 className="font-lokal text-3xl md:text-4xl lg:text-5xl font-medium leading-none -mt-1 text-black">
               Eastern Fifty
             </h1>
           </div>

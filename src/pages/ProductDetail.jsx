@@ -13,6 +13,7 @@ function ProductDetail() {
   const [zoom, setZoom] = useState({ active: false, x: 50, y: 50 });
 
   const handleMove = (e) => {
+    if (e.pointerType !== "mouse") return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -86,7 +87,7 @@ function ProductDetail() {
       <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-[0.7fr_1fr] lg:gap-16">
         {/* Gambar */}
         <div
-          className="group relative aspect-4/5 cursor-zoom-in overflow-hidden bg-stone-200"
+          className="group relative aspect-4/5 overflow-hidden bg-stone-200 lg:cursor-zoom-in"
           onMouseMove={handleMove}
           onMouseLeave={() => setZoom({ active: false, x: 50, y: 50 })}
         >
@@ -194,7 +195,7 @@ function ProductDetail() {
                   </button>
                 ))}
               </div>
-              {error && <p className="mt-2 text-xs text-red-600"></p>}
+              {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
             </div>
           )}
           {/* Select Size */}
@@ -234,7 +235,7 @@ function ProductDetail() {
           {/* Tombol */}
           <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <button
-              type="buttton"
+              type="button"
               onClick={handleAddToCart}
               className="flex items-center justify-between bg-gray-500 px-5 py-4 text-xs font-semibold uppercase text-white transition-colors hover:bg-zinc-800"
             >
