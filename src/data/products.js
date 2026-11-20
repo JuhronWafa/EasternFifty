@@ -49,7 +49,7 @@ const baseProducts = [
     variant: "Charcoal / White",
     badge: "New",
     image: "/assets/products/Hoodie.png",
-    colors: ["#4a4a4e", "#f5f5f5"],
+    colors: ["#4a4a4e", "#ffffff"],
   },
   {
     id: 6,
@@ -57,7 +57,7 @@ const baseProducts = [
     price: 320000,
     variant: "White / Blue",
     image: "/assets/products/LongSleeve.png",
-    colors: ["#f5f5f5", "#1f5fa8"],
+    colors: ["#ffffff", "#1f5fa8"],
   },
   {
     id: 7,
@@ -90,7 +90,7 @@ const baseProducts = [
     price: 220000,
     variant: "Navy / White",
     image: "/assets/products/Cap.png",
-    colors: ["#14213d", "#f5f5f5"],
+    colors: ["#14213d", "#ffffff"],
   },
   {
     id: 11,
@@ -98,7 +98,7 @@ const baseProducts = [
     price: 200000,
     variant: "Red / White",
     image: "/assets/products/Scarf.png",
-    colors: ["#c8102e", "#f5f5f5"],
+    colors: ["#c8102e", "#ffffff"],
   },
   {
     id: 12,

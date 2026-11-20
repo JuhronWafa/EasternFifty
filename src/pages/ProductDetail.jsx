@@ -63,7 +63,7 @@ function ProductDetail() {
 
   return (
     <main className="px-6 py-6 md:px-10">
-      {/* Header */}
+      {/* Breadcrumb */}
       <nav className="text-xs uppercase tracking-widest text-zinc-500">
         <Link to="/shop" className="hover:text-black">
           <i className="ri-arrow-left-up-line ri-lg"></i> Shop
@@ -71,7 +71,7 @@ function ProductDetail() {
         <span className="mx-2">/</span>
         <span className="text-black">Product Detail</span>
       </nav>
-      {/* Header */}
+      {/* Breadcrumb */}
 
       <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-[0.7fr_1fr] lg:gap-16">
         {/* Gambar */}

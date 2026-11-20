@@ -46,7 +46,7 @@ function Shop() {
 
   return (
     <main className="px-6 py-6 md:px-10">
-      {/* Header */}
+      {/* Breadcrumb */}
       <nav className="text-xs uppercase tracking-widest text-zinc-500">
         <Link to="/" className="hover:text-black">
           <i className="ri-arrow-left-up-line ri-lg"></i> Home
@@ -62,7 +62,7 @@ function Shop() {
         Crafted from the eastern tip of Kediri. Everyday streetwear made to
         outlast trends.
       </p>
-      {/* Header */}
+      {/* Breadcrumb */}
 
       <hr className="mt-6 border-zinc-300" />
 
@@ -87,44 +87,6 @@ function Shop() {
             </ul>
           </div>
           {/* Sidebar Filter */}
-
-          {/* Sidebar Size */}
-          {/* <div>
-            <p className="text-[10px] font-medium uppercase text-zinc-500">
-              Size
-            </p>
-            <div className="mt-3 flex gap-2">
-              {SIZES.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setSize(size === s ? null : s)}
-                  className={`h-8 w-8 border text-xs transition-colors ${size === s ? "bg-gray-500 text-white" : "border-zinc-200 hover:bg-zinc-200"}`}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div> */}
-          {/* Sidebar Size */}
-
-          {/* Sidebar Colour */}
-          {/* <div>
-            <p className="text-[10px] font-medium uppercase text-zinc-500">
-              Colour
-            </p>
-            <div className="mt-3 flex gap-2">
-              {COLORS.map((hex) => (
-                <button
-                  key={hex}
-                  onClick={() => setColor(color === hex ? null : hex)}
-                  aria-label={hex}
-                  style={{ backgroundColor: hex }}
-                  className={`h-5 w-5 border border-zinc-300 ${color === hex ? "ring-2 ring-black ring-offset-2" : ""}`}
-                />
-              ))}
-            </div>
-          </div> */}
-          {/* Sidebar Colour */}
         </aside>
 
         {/* Card */}
