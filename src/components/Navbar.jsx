@@ -40,9 +40,12 @@ const Navbar = () => {
               alt="Logo Eastern Fifty"
               className="h-8 md:h-10 lg:h-12 w-auto shrink-0"
             />
-            <h1 className="font-lokal text-3xl md:text-4xl lg:text-5xl font-medium leading-none -mt-1 text-black">
+            <h1 className="font-lokal text-3xl md:text-4xl lg:text-5xl font-medium leading-none text-black">
               Eastern Fifty
             </h1>
+            <sup className="-ml-2 align-top text-xs md:text-sm lg:text-base leading-none">
+              ®
+            </sup>
           </div>
           {/* Logo */}
 

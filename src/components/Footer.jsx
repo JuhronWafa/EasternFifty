@@ -15,8 +15,8 @@ const columns = [
     title: "Customer care",
     links: [
       { label: "Tracking", path: "/tracking" },
-      { label: "Shipping & returns", path: "/shipping" },
-      { label: "FAQs", path: "/faqs" },
+      { label: "Shipping & returns", path: "#" },
+      { label: "FAQs", path: "#" },
     ],
   },
 ];
@@ -28,9 +28,9 @@ const socials = [
 ];
 
 const legal = [
-  { label: "Privacy", path: "/privacy" },
-  { label: "Terms", path: "/terms" },
-  { label: "Cookies", path: "/cookies" },
+  { label: "Privacy", path: "#" },
+  { label: "Terms", path: "#" },
+  { label: "Cookies", path: "#" },
 ];
 
 const headingCls =
@@ -44,7 +44,7 @@ const Footer = () => {
   if (HIDDEN_ON.some((p) => pathname.startsWith(p))) return null;
   return (
     <footer className="mt-12 bg-black text-zinc-100">
-      <div className="grid grid-cols-1 gap-12 px-6 pb-16 pt-14 md:grid-cols-[minmax(0,2.4fr)_1fr_1fr_1fr] md:px-12">
+      <div className="grid grid-cols-1 gap-12 px-6 pb-14 pt-12 md:grid-cols-[minmax(0,2.4fr)_1fr_1fr_1fr] md:px-12">
         {/* Logo dan Nama Brand */}
         <div>
           <div className="flex items-center gap-x-2">
@@ -56,6 +56,9 @@ const Footer = () => {
             <h2 className="font-lokal text-xl md:text-2xl lg:text-3xl font-medium leading-none">
               Eastern Fifty
             </h2>
+            <sup className="-ml-2 align-top text-[8px] md:text-[10px] lg:text-xs leading-none">
+              ®
+            </sup>
           </div>
           <p className="mt-4 max-w-xs text-[10px] text-zinc-400 md:text-xs">
             No loud crests. Just pure pride. Everyday uniforms from the eastern
@@ -80,6 +83,8 @@ const Footer = () => {
           </div>
         ))}
         {/* Links Columns */}
+
+        {/* Social */}
         <div>
           <p className={headingCls}>Follow the culture</p>
           <ul className="mt-4 space-y-2">
@@ -92,10 +97,7 @@ const Footer = () => {
                   className={`${linkCls} inline-flex items-center gap-1.5`}
                 >
                   {s.label}
-                  {/* <i className="ri-arrow-up-right-line ri-lg"></i> */}
-                  <span aria-hidden className="text-xs">
-                    ↗
-                  </span>
+                  <i aria-hidden className="ri-arrow-right-up-line ri-lg"></i>
                 </a>
               </li>
             ))}
@@ -105,11 +107,11 @@ const Footer = () => {
       </div>
 
       {/* Bottom */}
-      <div className="mx-6 border-t border-zinc-700 md:mx-12" />
-      <div className="flex flex-col gap-3 px-6 py-5 text-[11px] uppercase text-zinc-100 md:flex-row md:items-center md:justify-between md:px-12">
-        <p>© {new Date().getFullYear()} Eastern Fifty. All rights reserved.</p>
+      <div className="mx-6 border-t border-zinc-800 md:mx-12" />
+      <div className="flex flex-col gap-3 px-6 py-5 text-[11px]  text-zinc-100 md:flex-row md:items-center md:justify-between md:px-12">
+        <p>© {new Date().getFullYear()} Eastern Fifty - All Rights Reserved</p>
 
-        <ul className="flex gap-4">
+        <ul className="m-0 flex list-none gap-4 p-0">
           {legal.map((l) => (
             <li key={l.label}>
               <Link to={l.path} className="hover:opacity-60">
@@ -119,9 +121,8 @@ const Footer = () => {
           ))}
         </ul>
 
-        <p className="text-zinc-100">Wp &nbsp;/&nbsp; 1'15</p>
+        <p className="text-zinc-100">WP &nbsp;/&nbsp; 1'15</p>
       </div>
-
       {/* Bottom */}
     </footer>
   );

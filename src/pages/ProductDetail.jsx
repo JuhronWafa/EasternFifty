@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { products } from "../data/products";
+import { products, formatRupiah } from "../data/products";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -12,29 +12,18 @@ function ProductDetail() {
   const [error, setError] = useState("");
   const [zoom, setZoom] = useState({ active: false, x: 50, y: 50 });
 
+  const canHover =
+    typeof window !== "undefined" &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  const resetZoom = () => setZoom({ active: false, x: 50, y: 50 });
+
   const handleMove = (e) => {
-    if (e.pointerType !== "mouse") return;
+    if (!canHover) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     setZoom({ active: true, x, y });
-  };
-
-  const CATEGORY_DESCRIPTIONS = {
-    Jerseys:
-      "Classic collar cut inspired by retro terrace wear. Sharp enough for the streets, comfortable for long matchday rides.",
-    Jackets:
-      "Built to handle cold night rides from the eastern border to the stadium. Durable outer shell with subtle 1950 details.",
-    "T-Shirts":
-      "Crafted from heavyweight cotton for daily wear. Clean terrace silhouette carrying the pride of the East.",
-    Pants:
-      "Relaxed track cut made for the walk to the stadium and everything after the final whistle. Easy to wear, hard to outgrow.",
-    Hoodies:
-      "Heavyweight fleece for chilly matchday mornings. A quiet silhouette with the weight of the 1950 legacy.",
-    Shorts:
-      "Lightweight and made to move, from training days to warm evenings on the terrace. No loud logos, just pure pride.",
-    Accessories:
-      "The finishing touch for every matchday. Small details stitched with the spirit of the East.",
   };
 
   if (!item) {
@@ -89,7 +78,8 @@ function ProductDetail() {
         <div
           className="group relative aspect-4/5 overflow-hidden bg-stone-200 lg:cursor-zoom-in"
           onMouseMove={handleMove}
-          onMouseLeave={() => setZoom({ active: false, x: 50, y: 50 })}
+          onMouseLeave={resetZoom}
+          onBlur={resetZoom}
         >
           <img
             src={item.image}
@@ -116,8 +106,8 @@ function ProductDetail() {
           <p className="mt-2 text-xs md:text-sm uppercase text-zinc-600">
             {item.category} in {item.variant}
           </p>
-          <p className="mt-6 text-xl md:text-2xl lg:text-3xl text-black">
-            {item.price}
+          <p className="mt-6 text-lg md:text-xl lg:text-2xl text-black">
+            {formatRupiah(item.price)}
           </p>
 
           {/* Product Detail */}
@@ -126,9 +116,7 @@ function ProductDetail() {
               Product details
             </h2>
             <p className="mt-3 text-xs md:text-sm leading-relaxed text-zinc-600">
-              {item.description ??
-                CATEGORY_DESCRIPTIONS[item.category] ??
-                "Everyday staples, matchday mentality."}
+              {item.description ?? "Everyday staples, matchday mentality."}
             </p>
           </div>
           {/* Product Detail */}
@@ -161,15 +149,28 @@ function ProductDetail() {
 
           {/* Variant */}
           <div className="mt-6">
-            <p className="text-xs md:text-sm">
-              <span className="font-semibold">Variant : </span>
-              <span className="text-zinc-600">{item.variant}</span>
-            </p>
-            <div className="w-25 text-center">
+            <div className="flex items-center gap-3">
+              <p className="text-xs md:text-sm">
+                <span className="font-semibold">Variant : </span>
+                <span className="text-zinc-600">{item.variant}</span>
+              </p>
+
+              <div className="flex gap-1.5">
+                {item.colors.map((color) => (
+                  <span
+                    key={color}
+                    className="h-3 w-3"
+                    style={{ background: color }}
+                  ></span>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-4 w-25 text-center">
               <img
                 src={item.image}
                 alt={item.variant}
-                className="mt-2 h-25 w-25 object-contain"
+                className="h-25 w-25 object-contain"
               />
               <p className="mt-1 text-[10px] md:text-xs">{item.variant}</p>
             </div>

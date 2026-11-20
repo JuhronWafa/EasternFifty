@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { formatRupiah } from "../data/products";
 
 const ProductCard = ({ item, showSwatches = true }) => {
   return (
@@ -20,16 +21,11 @@ const ProductCard = ({ item, showSwatches = true }) => {
         <div className="mt-3">
           <h3 className="font-semibold text-xs md:text-sm">{item.name}</h3>
           <span className=" text-xs md:text-sm text-slate-600">
-            {item.price}
+            {formatRupiah(item.price)}
           </span>
           <p className="mt-1 text-[10px] text-zinc-500 md:text-xs">
             {item.variant}
           </p>
-          {/* {item.sizes?.length > 0 && (
-          <p className="mt-1 text-[10px] text-zinc-400 md:text-xs">
-            {item.sizes.join(" / ")}
-          </p>
-        )} */}
 
           {showSwatches && item.colors && (
             <div className="mt-2 flex gap-1.5">
