@@ -90,7 +90,7 @@ const Navbar = () => {
                 end={item.path === "/"}
                 onClick={() => setIsOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center gap-1 text-base uppercase tracking-wide ${isActive ? "text-black" : "text-zinc-700"}`
+                  `flex items-center gap-1 text-sm uppercase tracking-wide ${isActive ? "text-black" : "text-zinc-700"}`
                 }
               >
                 {item.label}

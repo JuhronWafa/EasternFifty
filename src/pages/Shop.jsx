@@ -58,7 +58,7 @@ function Shop() {
       <h1 className="mt-4 font-anton text-3xl uppercase leading-none md:text-5xl lg:text-6xl">
         The Eastern Archive.
       </h1>
-      <p className="mt-2 text-sm text-zinc-600">
+      <p className="mt-2 text-xs md:text-sm text-zinc-600">
         Crafted from the eastern tip of Kediri. Everyday streetwear made to
         outlast trends.
       </p>

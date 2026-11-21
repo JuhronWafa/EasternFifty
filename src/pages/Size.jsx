@@ -2,24 +2,23 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 const SIZES = ["S", "M", "L", "XL", "XXL"];
-const GRAY = "text-gray-500";
+const GRAY = "#6b7280";
 
 const TOP_COLS = [
   { key: "a", short: "A", label: "Chest", hint: "Armpit to armpit" },
   { key: "b", short: "B", label: "Length", hint: "Shoulder to hem" },
-  { key: "C", short: "C", label: "Sleeve", hint: "Seam to cuff" },
+  { key: "c", short: "C", label: "Sleeve", hint: "Seam to cuff" },
 ];
 const BOTTOM_COLS = [
   { key: "a", short: "A", label: "Waist", hint: "Across the waistband" },
   { key: "b", short: "B", label: "Hip", hint: "Across the widest point" },
-  { key: "C", short: "C", label: "Length", hint: "Waistband to hem" },
+  { key: "c", short: "C", label: "Length", hint: "Waistband to hem" },
 ];
 
 const CATEGORIES = [
   {
     id: "tshirt",
     label: "T-Shirt",
-    diagram: "top",
     cols: TOP_COLS,
     bands: [58, 68, 78, 88],
     data: {
@@ -32,7 +31,6 @@ const CATEGORIES = [
   {
     id: "jersey",
     label: "Jerseys",
-    diagram: "top",
     cols: TOP_COLS,
     bands: [56, 66, 76, 86],
     data: {
@@ -45,7 +43,6 @@ const CATEGORIES = [
   {
     id: "jacket",
     label: "Jackets",
-    diagram: "top",
     cols: [
       TOP_COLS[0],
       TOP_COLS[1],
@@ -60,9 +57,20 @@ const CATEGORIES = [
     note: "Jackets are made with room for a layer underneath. If you plan to wear it over a hoodie, consider sizing up.",
   },
   {
+    id: "hoodie",
+    label: "Hoodies",
+    cols: TOP_COLS,
+    bands: [58, 68, 78, 88],
+    data: {
+      a: [58, 61, 64, 67, 70],
+      b: [68, 71, 74, 77, 80],
+      c: [60, 62, 64, 66, 68],
+    },
+    note: "Hoodies are cut heavy and relaxed. True to size for the intended drape, size down if you prefer it closer.",
+  },
+  {
     id: "shorts",
     label: "Shorts",
-    diagram: "bottom",
     cols: BOTTOM_COLS,
     bands: [60, 70, 80, 90],
     data: {
@@ -75,7 +83,6 @@ const CATEGORIES = [
   {
     id: "pants",
     label: "Pants",
-    diagram: "bottom",
     cols: BOTTOM_COLS,
     bands: [60, 70, 80, 90],
     data: {
@@ -87,7 +94,7 @@ const CATEGORIES = [
   },
 ];
 
-const FIT = [
+const FITS = [
   { id: "closer", label: "Closer", adj: -1 },
   { id: "regular", label: "Regular", adj: 0 },
   { id: "roomier", label: "Roomier", adj: 1 },
@@ -122,79 +129,207 @@ function recommend(cat, height, weight, fitId) {
 
 const Tag = ({ x, y, children }) => (
   <g>
-    <rect x={x} y={y} width="22" height="22" fill={GRAY} />
+    <rect x={x} y={y} width="22" height="22" className="fill-white" />
     <text
       x={x + 11}
       y={y + 16}
       textAnchor="middle"
       fontSize="13"
       fontWeight="700"
-      fill="#000"
+      className="fill-black"
     >
       {children}
     </text>
   </g>
 );
 
-const Diagram = ({ type }) =>
-  type === "top" ? (
+const D = "fill-none stroke-zinc-600 stroke-2"; // gaya garis detail (jahitan dll.)
+
+const DIAGRAMS = {
+  // Boxy / drop shoulder, kerah rib bulat
+  tshirt: {
+    body: "M108 20 L62 36 Q34 48 14 94 L46 116 L74 100 L72 232 Q150 240 228 232 L226 100 L254 116 L286 94 Q266 48 238 36 L192 20 Q150 54 108 20 Z",
+    details: [
+      {
+        d: "M114 22 Q150 54 186 22",
+        cls: "fill-none stroke-zinc-500 stroke-[3]",
+      },
+      { d: "M72 220 Q150 228 228 220", cls: D },
+      { d: "M24 88 L52 108", cls: D },
+      { d: "M276 88 L248 108", cls: D },
+    ],
+    lines: [
+      [74, 106, 226, 106],
+      [150, 40, 150, 232],
+      [62, 38, 30, 105],
+    ],
+    tags: [
+      ["A", 80, 95],
+      ["B", 139, 200],
+      ["C", 10, 30],
+    ],
+  },
+
+  // Kerah V, rib, panel samping
+  jersey: {
+    body: "M104 20 L60 34 Q30 46 18 92 L50 110 L78 92 L80 236 Q150 242 220 236 L222 92 L250 110 L282 92 Q270 46 240 34 L196 20 L150 70 Z",
+    details: [
+      {
+        d: "M112 22 L150 62 L188 22",
+        cls: "fill-none stroke-zinc-500 stroke-[3]",
+      },
+      { d: "M90 100 L92 236", cls: D },
+      { d: "M210 100 L208 236", cls: D },
+      { d: "M80 224 Q150 230 220 224", cls: D },
+    ],
+    lines: [
+      [80, 100, 220, 100],
+      [150, 72, 150, 238],
+      [60, 36, 34, 101],
+    ],
+    tags: [
+      ["A", 84, 89],
+      ["B", 139, 200],
+      ["C", 8, 30],
+    ],
+  },
+
+  // Lengan panjang, kerah berdiri, zipper, kantong samping
+  jacket: {
+    body: "M108 22 Q104 14 120 12 L180 12 Q196 14 192 22 L232 36 Q256 46 264 76 L282 198 L252 204 L228 112 L226 236 Q150 244 74 236 L72 112 L48 204 L18 198 L36 76 Q44 46 68 36 Z",
+    details: [
+      { d: "M150 24 L150 238", cls: "fill-none stroke-zinc-500 stroke-2" },
+      { d: "M112 24 L150 44 L188 24", cls: D },
+      { d: "M92 150 L92 190", cls: D },
+      { d: "M208 150 L208 190", cls: D },
+      { d: "M74 222 Q150 230 226 222", cls: D },
+      { d: "M21 184 L50 190", cls: D },
+      { d: "M279 184 L250 190", cls: D },
+    ],
+    lines: [
+      [72, 112, 228, 112],
+      [112, 26, 112, 238],
+      [62, 44, 33, 198],
+    ],
+    tags: [
+      ["A", 80, 101],
+      ["B", 101, 205],
+      ["C", 4, 110],
+    ],
+  },
+
+  // Hood, tali, kantong kangaroo, rib manset dan ujung
+  hoodie: {
+    body: "M104 30 Q100 6 150 4 Q200 6 196 30 L234 42 Q258 52 266 80 L282 196 L252 202 L228 116 L226 236 Q150 244 74 236 L72 116 L48 202 L18 196 L34 80 Q42 52 66 42 Z",
+    details: [
+      {
+        d: "M112 26 Q150 78 188 26 Q150 14 112 26 Z",
+        cls: "fill-zinc-900 stroke-zinc-600 stroke-2",
+      },
+      { d: "M132 60 L130 98", cls: "fill-none stroke-zinc-500 stroke-2" },
+      { d: "M168 60 L170 98", cls: "fill-none stroke-zinc-500 stroke-2" },
+      { d: "M96 160 L204 160 L216 214 L84 214 Z", cls: D },
+      { d: "M74 224 Q150 232 226 224", cls: D },
+      { d: "M21 186 L50 192", cls: D },
+      { d: "M279 186 L250 192", cls: D },
+    ],
+    lines: [
+      [72, 116, 228, 116],
+      [150, 40, 150, 236],
+      [62, 46, 33, 198],
+    ],
+    tags: [
+      ["A", 78, 105],
+      ["B", 139, 176],
+      ["C", 4, 110],
+    ],
+  },
+
+  // Pendek, di atas lutut, pinggang karet dan tali
+  shorts: {
+    body: "M86 36 Q150 44 214 36 L236 176 Q236 182 230 182 L166 182 L150 112 L134 182 L70 182 Q64 182 64 176 Z",
+    details: [
+      { d: "M86 52 Q150 60 214 52", cls: D },
+      { d: "M140 48 L138 70", cls: "fill-none stroke-zinc-500 stroke-2" },
+      { d: "M160 48 L162 70", cls: "fill-none stroke-zinc-500 stroke-2" },
+      { d: "M67 170 L135 170", cls: D },
+      { d: "M165 170 L233 170", cls: D },
+    ],
+    lines: [
+      [86, 44, 214, 44],
+      [78, 96, 222, 96],
+      [108, 42, 108, 182],
+    ],
+    tags: [
+      ["A", 139, 33],
+      ["B", 139, 85],
+      ["C", 97, 140],
+    ],
+  },
+
+  // Panjang, sedikit meruncing, garis samping, ban kaki
+  pants: {
+    body: "M84 14 Q150 22 216 14 L240 232 Q241 240 232 240 L172 240 L150 96 L128 240 L68 240 Q59 240 60 232 Z",
+    details: [
+      { d: "M85 30 Q150 38 215 30", cls: D },
+      { d: "M140 26 L138 52", cls: "fill-none stroke-zinc-500 stroke-2" },
+      { d: "M160 26 L162 52", cls: "fill-none stroke-zinc-500 stroke-2" },
+      { d: "M92 44 L72 228", cls: D },
+      { d: "M208 44 L228 228", cls: D },
+      { d: "M62 226 L130 226", cls: D },
+      { d: "M170 226 L238 226", cls: D },
+    ],
+    lines: [
+      [84, 22, 216, 22],
+      [80, 72, 220, 72],
+      [104, 18, 104, 240],
+    ],
+    tags: [
+      ["A", 139, 11],
+      ["B", 139, 61],
+      ["C", 93, 200],
+    ],
+  },
+};
+
+const Diagram = ({ type }) => {
+  const d = DIAGRAMS[type] ?? DIAGRAMS.tshirt;
+  return (
     <svg
       viewBox="0 0 300 260"
       className="h-full w-full"
       role="img"
-      aria-label="Top measurement diagram"
+      aria-label="Measurement diagram"
     >
-      <path
-        d="M100 20 L60 40 L20 90 L50 110 L70 95 L70 240 L230 240 L230 95 L250 110 L280 90 L240 40 L200 20 Q150 52 100 20 Z"
-        fill="#1f1f1f"
-      />
-      <g stroke={GRAY} strokeWidth="3">
-        <line x1="70" y1="110" x2="230" y2="110" />
-        <line x1="150" y1="36" x2="150" y2="240" />
-        <line x1="66" y1="42" x2="34" y2="96" />
+      {/* Siluet */}
+      <path d={d.body} className="fill-zinc-800" />
+
+      {/* Aksen (zipper, hood, kantong) */}
+      {d.details?.map((p, i) => (
+        <path key={i} d={p.d} className={p.cls} />
+      ))}
+
+      {/* Garis ukur A, B, C */}
+      <g className="stroke-white" strokeWidth="3">
+        {d.lines.map(([x1, y1, x2, y2], i) => (
+          <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} />
+        ))}
       </g>
-      <Tag x={76} y={99}>
-        A
-      </Tag>
-      <Tag x={139} y={212}>
-        B
-      </Tag>
-      <Tag x={8} y={28}>
-        C
-      </Tag>
-    </svg>
-  ) : (
-    <svg
-      viewBox="0 0 300 260"
-      className="h-full w-full"
-      role="img"
-      aria-label="Bottom measurement diagram"
-    >
-      <path
-        d="M90 20 L210 20 L228 240 L166 240 L150 100 L134 240 L72 240 Z"
-        fill="#1f1f1f"
-      />
-      <g stroke={LIME} strokeWidth="3">
-        <line x1="90" y1="30" x2="210" y2="30" />
-        <line x1="84" y1="78" x2="216" y2="78" />
-        <line x1="108" y1="22" x2="108" y2="240" />
-      </g>
-      <Tag x={139} y={19}>
-        A
-      </Tag>
-      <Tag x={139} y={67}>
-        B
-      </Tag>
-      <Tag x={97} y={204}>
-        C
-      </Tag>
+
+      {/* Label A, B, C */}
+      {d.tags.map(([t, x, y]) => (
+        <Tag key={t} x={x} y={y}>
+          {t}
+        </Tag>
+      ))}
     </svg>
   );
+};
 
 const fieldCls =
-  "w-full border border-zinc-300 bg-white px-4 py-3 pr-12 text-xs text-black outline-none transition-colors placeholder:text-zinc-400 focus:border-black";
+  "w-full border border-zinc-300 bg-white px-4 py-3 pr-12 text-xs md:text-sm text-black outline-none transition-colors placeholder:text-zinc-400 focus:border-black";
 const labelCls =
-  "text-[11px] font-medium uppercase tracking-wide text-zinc-500";
+  "text-[10px] font-medium uppercase tracking-wide text-zinc-500";
 
 const Size = () => {
   const [catId, setCatId] = useState("tshirt");
@@ -249,16 +384,18 @@ const Size = () => {
       <h1 className="mt-4 font-anton text-3xl uppercase leading-none md:text-5xl lg:text-6xl">
         Find your fit.
       </h1>
-      <p className="mt-2 text-sm text-zinc-600">
+      <p className="mt-2 text-xs md:text-sm text-zinc-600">
         Tell us your height and weight. We will point you to the right size.
       </p>
       {/* Header */}
 
+      <hr className="mt-6 border-zinc-300" />
+
       {/* Finder */}
       <section className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
         <form
-        // onSubmit={handleSubmit}
-        // className="border border-zinc-300 p-6 md:p-8"
+          onSubmit={handleSubmit}
+          // className="border border-zinc-300 p-6 md:p-8"
         >
           {/* Step 1 */}
           <div className="min-w-0">
@@ -269,7 +406,7 @@ const Size = () => {
                   key={c.id}
                   type="button"
                   onClick={() => setCatId(c.id)}
-                  className={`shrink-0 whitespace-nowrap px-3 py-3 text-left text-xs transition-colors ${c.id === catId ? "bg-gray-500 text-white" : "hover:bg-zinc-200"}`}
+                  className={`shrink-0 whitespace-nowrap px-3 py-3 text-left text-xs transition-colors ${c.id === catId ? "bg-black text-white" : "hover:bg-zinc-200"}`}
                 >
                   {c.label}
                 </button>
@@ -315,8 +452,186 @@ const Size = () => {
           </div>
 
           {/* Step 3 */}
+          <p className={`${labelCls} mt-8`}>03 · Fit preference</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {FITS.map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => setFit(f.id)}
+                className={`px-3 py-3 text-left text-xs transition-colors ${f.id === fit ? "bg-black text-white" : "hover:bg-zinc-200"}`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+
+          {error && (
+            <p role="alert" className="mt-5 text-xs text-red-600">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            className="mt-8 flex w-full items-center justify-between bg-gray-500 px-6 py-4 text-xs font-medium text-white transition-colors hover:bg-zinc-800 sm:w-auto sm:gap-10"
+          >
+            Find My Size
+            <i
+              aria-hidden
+              className="ri-arrow-right-up-line ri-lg text-base leading-none"
+            ></i>
+          </button>
         </form>
+
+        {/* Result */}
+        <aside
+          className="flex min-h-[260px] flex-col items-center justify-center bg-white text-center p-6 text-white md:p-8"
+          aria-live="polite"
+        >
+          <p className="text-xs font-medium capitalize tracking-wide text-black md:text-sm">
+            Recommended Size · {cat.label}
+          </p>
+          {result ? (
+            <div className="flex flex-col items-center">
+              <p className="mt-2 font-anton text-7 leading-none text-black md:text-8xl lg:text-9xl">
+                {SIZES[result.index]}
+              </p>
+              {result.altIndex !== null && (
+                <p className="mt-4 text-xs md:text-sm text-black">
+                  You are between{" "}
+                  {SIZES[Math.min(result.index, result.altIndex)]} and{" "}
+                  {SIZES[Math.max(result.index, result.altIndex)]}. Pick the
+                  bigger one for a roomier feel.
+                </p>
+              )}
+              <p className="mt-4 text-[10px] md:text-xs uppercase text-black">
+                {submitted.height} cm · {submitted.weight} kg ·{" "}
+                {FITS.find((f) => f.id === fit).label} fit
+              </p>
+            </div>
+          ) : (
+            <div>
+              <p className="font-anton text-7xl leading-none text-black md:text-8xl lg:text-9xl">
+                -
+              </p>
+              <p className="mt-4 text-xs md:text-sm text-black">
+                Fill in your height and weight to see your size
+              </p>
+            </div>
+          )}
+        </aside>
       </section>
+
+      {/* Measurements + Diagram */}
+      <section className="mt-16 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
+        <div>
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-medium uppercase">
+              Garment measurements
+            </h2>
+            <div className="inline-flex bg-zinc-200/70 p-0.5 text-[10px] md:text-[11px] font-medium">
+              {["cm", "in"].map((u) => (
+                <button
+                  key={u}
+                  type="button"
+                  onClick={() => setUnit(u)}
+                  className={`px-6 py-2.5 uppercase transition-colors ${unit === u ? "bg-black text-white" : "text-zinc-500"}`}
+                >
+                  {u}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <table className="w-full table-fixed text-left text-xs md:text-sm">
+              <thead>
+                <tr className="bg-gray-500 text-[10px] md:text-xs uppercase text-white">
+                  <th className="px-5 py-5 font-medium">Size</th>
+                  {cat.cols.map((c) => (
+                    <th key={c.key} className="px-5 py-5 font-medium">
+                      {c.short} · {c.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {SIZES.map((s, i) => (
+                  <tr
+                    key={s}
+                    className={`border-b border-zinc-300 ${result && result.index === i ? "bg-zinc-200" : ""}`}
+                  >
+                    <td className="px-5 py-5 font-medium">{s}</td>
+                    {cat.cols.map((c) => (
+                      <td key={c.key} className="px-5 py-5">
+                        {fmt(cat.data[c.key][i])}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-4 text-[10px] md:text-xs text-zinc-500">
+            Measured flat in {unit === "cm" ? "centimetres" : "inches"}. Allow ±
+            {unit === "cm" ? "2 cm" : "0.8 in"} for garment variation.
+          </p>
+
+          <div className="mt-10 bg-black p-6 text-white md:p-8">
+            <h3 className="font-anton text-2xl md:text-3xl lg:text-4xl uppercase leading-none">
+              A little room to move.
+            </h3>
+            <p className="mt-4 max-w-md text-xs md:text-sm text-zinc-400">
+              {cat.note}
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <div className="bg-zinc-200 p-6">
+            <div className="relative aspect-[4/3] bg-zinc-300 p-6">
+              <p className="absolute left-4 top-4 text-[10px] font-bold  tracking-wide text-black md:text-xs">
+                {cat.label}
+              </p>
+              <Diagram type={cat.id} />
+            </div>
+            <h3 className="mt-6 text-xs font-medium uppercase">
+              How to measure
+            </h3>
+            <p className="mt-3 text-[10px] md:text-xs text-zinc-500">
+              Lay the garment flat. Compare with a favourite piece.
+            </p>
+          </div>
+
+          <dl className="mt-6 grid grid-cols-3 gap-4">
+            {cat.cols.map((c) => (
+              <div key={c.key}>
+                <dt className="text-[10px] md:text-xs font-medium uppercase">
+                  {c.short} {c.label}
+                </dt>
+                <dd className="mt-2 text-[10px] md:text-xs text-zinc-500">
+                  {c.hint}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <p className="mt-16 text-[10px] md:text-xs font-medium uppercase">
+        Still not sure?{" "}
+        <a
+          href="https://instagram.com/easternfifty"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 hover:opacity-60"
+        >
+          Contact the club{" "}
+          <i aria-hidden className="ri-arrow-right-up-line ri-lg"></i>
+        </a>
+      </p>
     </main>
   );
 };

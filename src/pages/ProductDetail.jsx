@@ -245,7 +245,7 @@ function ProductDetail() {
             <button
               type="button"
               onClick={handleBuyNow}
-              className="border border-zinc-400 px-5 py-4 text-xs font-semibold uppercase transition-colors hover:bg-gray-500 hover:text-white"
+              className="border border-zinc-300 px-5 py-4 text-xs font-semibold uppercase transition-colors hover:bg-gray-500 hover:text-white"
             >
               Buy now
             </button>
