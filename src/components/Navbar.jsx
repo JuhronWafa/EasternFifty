@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
 const menuItems = [
   { label: "Home", path: "/" },

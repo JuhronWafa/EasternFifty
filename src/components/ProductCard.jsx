@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { formatRupiah } from "../data/products";
+import { useCart } from "../context/CartContext";
 
 const ProductCard = ({ item, showSwatches = true }) => {
   return (

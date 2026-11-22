@@ -6,6 +6,7 @@ import Shop from "./pages/Shop.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
 import Footer from "./components/Footer.jsx";
 import Size from "./pages/Size.jsx";
+import Cart from "./pages/Cart.jsx"
 
 function App() {
   const location = useLocation();
@@ -37,6 +38,7 @@ function App() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/shop/:id" element={<ProductDetail />} />
           <Route path="/size" element={<Size />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
         <Footer />
       </div>

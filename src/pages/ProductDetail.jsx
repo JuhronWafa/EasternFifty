@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { products, formatRupiah } from "../data/products";
+import { useCart } from "../context/CartContext";
 
 function ProductDetail() {
   const { id } = useParams();
