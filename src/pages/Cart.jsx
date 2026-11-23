@@ -6,7 +6,7 @@ const SIZES = ["S", "M", "L", "XL", "XXL"];
 const FREE_SHIPPING_FROM = 500000;
 const SHIPPING_FEE = 20000;
 const MAX_QTY = 10;
-const DISCOUNT_CODES = { EASTERN50: 0.1 };
+const DISCOUNT_CODES = { EASTERN10: 0.1, EASTERN20: 0.2 };
 
 const rupiah = (n) =>
   new Intl.NumberFormat("id-ID", {
@@ -14,29 +14,6 @@ const rupiah = (n) =>
     currency: "IDR",
     maximumFractionDigits: 0,
   }).format(n);
-
-const INITIAL_ITEMS = [
-  {
-    id: 1,
-    name: "Away Days Jersey",
-    price: 349000,
-    image: "/assets/products/Jersey.png",
-    size: "M",
-    color: "Ecru / Navy",
-    colors: ["Ecru / Navy", "Black / White"],
-    qty: 1,
-  },
-  {
-    id: 2,
-    name: "Club Heavyweight Tee",
-    price: 189000,
-    image: "/assets/products/Tee.png",
-    size: "M",
-    color: "Washed Black",
-    colors: ["Washed Black", "Off White"],
-    qty: 1,
-  },
-];
 
 const labelCls =
   "text-[11px] font-medium uppercase tracking-wide text-zinc-500";
@@ -47,7 +24,7 @@ const Select = ({ value, onChange, options, label, prefix = "" }) => (
       aria-label={label}
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full appearance-none border border-zinc-300 bg-white py-2.5 pl-3 pr-8 text-xs text-black outline-none transition-colors focus:border-black"
+      className="h-8 w-full appearance-none border border-zinc-300 bg-white pl-3 pr-8 text-[10px] text-black outline-none transition-colors focus:border-black md:text-xs"
     >
       {options.map((o) => (
         <option key={o} value={o}>
@@ -58,7 +35,7 @@ const Select = ({ value, onChange, options, label, prefix = "" }) => (
     </select>
     <i
       aria-hidden
-      className="ri-arrow-down-s-line pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-base leading-none text-zinc-500"
+      className="ri-arrow-down-s-line pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-sm leading-none text-zinc-500"
     ></i>
   </div>
 );
@@ -85,16 +62,12 @@ const EmptyCart = () => (
 );
 
 const Cart = () => {
-  const [items, setItems] = useState(INITIAL_ITEMS);
+  const { items, updateItem, removeItem } = useCart();
+
   const [showCode, setShowCode] = useState(false);
   const [code, setCode] = useState("");
   const [appliedCode, setAppliedCode] = useState(null);
   const [codeError, setCodeError] = useState("");
-
-  const updateItem = (id, patch) =>
-    setItems((prev) => prev.map((i) => (i.id === id ? { ...i, ...patch } : i)));
-  const removeItem = (id) =>
-    setItems((prev) => prev.filter((i) => i.id !== id));
 
   if (items.length === 0) return <EmptyCart />;
 
@@ -154,7 +127,7 @@ const Cart = () => {
 
       <hr className="mt-6 border-zinc-300" />
 
-      <section className="mt-8 grid gap-10 lg:grid-cols-[minimax(0,1.6fr)_minimax(0,1fr)]">
+      <section className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
         {/* Daftar Produk */}
         <div>
           <div className="hidden grid-cols-[minmax(0,1fr)_140px_110px] border-b border-zinc-300 pb-4 md:grid">
@@ -168,12 +141,12 @@ const Cart = () => {
           <ul>
             {items.map((item) => (
               <li
-                key={item.id}
-                className="grid gap-4 border-b border-zinc-300 py-6 md:grid-cols-[minimax(0,1fr)_140px_110px] md:items-center"
+                key={item.lineId}
+                className="grid gap-4 border-b border-zinc-300 py-6 md:grid-cols-[minmax(0,1fr)_140px_110px] md:items-center"
               >
                 {/* Produk */}
                 <div className="flex gap-4 md:gap-5">
-                  <div className="aspect-[3/4] w-24 shrink-0 bg-zinc-200 md:w-36">
+                  <div className="aspect-3/4 w-24 shrink-0 bg-zinc-200 md:w-36">
                     <img
                       src={item.image}
                       alt={item.name}
@@ -182,54 +155,65 @@ const Cart = () => {
                   </div>
 
                   <div className="flex min-w-0 flex-1 flex-col">
-                    <h2 className="text-sm font-medium md:text-base">
+                    <h2 className="text-xs font-semibold md:text-sm">
                       {item.name}
                     </h2>
-                    <p className="mt-1 text-xs text-zinc-500">
+                    <p className="mt-1 text-[10px] md:text-xs text-zinc-500">
                       {rupiah(item.price)}
                     </p>
 
-                    <div className="mt-4 grid max-w-sm grid-cols-2 gap-2">
-                      <select
-                        label={`Size for ${item.name}`}
-                        prefix="Size : "
-                        value={item.size}
-                        option={SIZES}
-                        onChange={(v) => updateItem(item.id, { color: v })}
-                      />
-                      <select
-                        label={`Colour for ${item.name}`}
-                        value={item.color}
-                        option={item.colors}
-                        onChange={(v) => updateItem(item.id, { color: v })}
-                      />
+                    <div className="mt-4 grid max-w-xs grid-cols-2 gap-2">
+                      {item.size !== "-" && (
+                        <Select
+                          label={`Size for ${item.name}`}
+                          // prefix="Size : "
+                          value={item.size}
+                          options={item.sizes ?? SIZES}
+                          onChange={(v) => updateItem(item.lineId, { size: v })}
+                        />
+                      )}
+                      {item.colors?.length > 0 && (
+                        <Select
+                          label={`Colour for ${item.name}`}
+                          value={item.color}
+                          options={item.colors}
+                          onChange={(v) =>
+                            updateItem(item.lineId, { color: v })
+                          }
+                        />
+                      )}
                     </div>
 
                     <button
                       type="button"
-                      onClick={() => removeItem(item.id)}
-                      className="mt-4 self-start text-xs text-zinc-500 underline-offset-4 hover:text-black hover:underline md:mt-auto"
+                      onClick={() => removeItem(item.lineId)}
+                      className="mt-4 self-start text-[10px] md:text-xs text-zinc-500 underline-offset-4 hover:text-red-600 md:mt-auto"
                     >
-                      Remove
+                      Remove <i className="ri-delete-bin-line ri-lg"></i>
                     </button>
                   </div>
                 </div>
 
                 {/* Quantity + Total */}
                 <div className="flex items-center justify-between md:contents">
-                  <div className="inline-flex w-fit items-center border border-zinc-300 bg-white">
+                  <div className="inline-flex h-8 w-fit items-center border border-zinc-300 bg-white">
                     <button
                       type="button"
                       aria-label="Decrease quantity"
                       disabled={item.qty <= 1}
-                      onClick={() => updateItem(item.id, { qty: item.qty - 1 })}
-                      className="px-3 py2.5
+                      onClick={() =>
+                        updateItem(item.lineId, { qty: item.qty - 1 })
+                      }
+                      className="flex w-8 items-center justify-center
                        hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-30"
                     >
-                      <i aria-hidden className="ri-subtract-line ri-lg"></i>
+                      <i
+                        aria-hidden
+                        className="ri-subtract-line text-sm leading-none"
+                      ></i>
                     </button>
                     <span
-                      className="w-8 text-center text-xs"
+                      className="flex w-8 items-center justify-center text-[10px] md:text-xs"
                       aria-live="polite"
                     >
                       {item.qty}
@@ -238,13 +222,19 @@ const Cart = () => {
                       type="button"
                       aria-label="Increase quantity"
                       disabled={item.qty >= MAX_QTY}
-                      onClick={() => updateItem(item.id, { qty: item.id + 1 })}
+                      onClick={() =>
+                        updateItem(item.lineId, { qty: item.qty + 1 })
+                      }
+                      className="flex w-8 items-center justify-center hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-30"
                     >
-                      <i aria-hidden className="ri-add-line ri-lg"></i>
+                      <i
+                        aria-hidden
+                        className="ri-add-line text-sm leading-none"
+                      ></i>
                     </button>
                   </div>
 
-                  <p className="text-sm font-medium md:text-right">
+                  <p className="text-xs md:text-sm font-medium md:text-right">
                     {rupiah(item.price * item.qty)}
                   </p>
                 </div>
@@ -252,7 +242,124 @@ const Cart = () => {
             ))}
           </ul>
           {/* Akhir */}
+
+          {/* Club Promise */}
+          <div className="mt-10">
+            <p className="text-[11px] font-medium uppercase">
+              The club promise
+            </p>
+            <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[10px] md:text-xs text-zinc-500 capitalize">
+              <span>Easy 30-day returns</span>
+              <span aria-hidden>/</span>
+              <span>Considered quality</span>
+              <span aria-hidden>/</span>
+              <span>Worldwide delivery</span>
+            </p>
+          </div>
         </div>
+        {/* Club Promise */}
+
+        {/* Ringkasa */}
+        <aside className="self-start">
+          <div className="bg-zinc-200 p-6 md:p-8">
+            <h2 className="font-anton text-2xl uppercase leading-none md:text-3xl">
+              The final score.
+            </h2>
+
+            <dl className="mt-8 space-y-4 text-xs md:text-sm">
+              <div className="flex justify-between">
+                <dt>Subtotal</dt>
+                <dd>{rupiah(subtotal)}</dd>
+              </div>
+              {discount > 0 && (
+                <div className="flex justify-between">
+                  <dt>Discount ({appliedCode})</dt>
+                  <dd>-{rupiah(discount)}</dd>
+                </div>
+              )}
+              <div className="flex justify-between">
+                <dt>Standard shipping</dt>
+                <dd className={freeShipping ? "text-xs font-medium" : ""}>
+                  {freeShipping ? "FREE" : rupiah(shipping)}
+                </dd>
+              </div>
+            </dl>
+
+            <div className="mt-6 flex items-baseline justify-between border-t border-zinc-300 pt-6">
+              <span className="text-xs font-medium uppercase">Total</span>
+              <span className="font-anton text-2xl leading-none md:text-3xl">
+                {rupiah(total)}
+              </span>
+            </div>
+            <p className="mt-4  text-[10px] md:text-xs text-zinc-500">
+              Taxes included. No surprises at the final whistle.
+            </p>
+
+            <Link
+              to="/checkout"
+              className="mt-8 flex items-center justify-between bg-gray-500 px-5 py-4 text-[10px] md:text-xs font-medium uppercase text-white transition-colors hover:bg-zinc-800"
+            >
+              Checkout
+              <i aria-hidden className="ri-arrow-right-up-line ri-lg"></i>
+            </Link>
+            <p className="mt-3 text-[10px] md:text-xs text-zinc-500">
+              Secure checkout / Jago · Gopay · QRIS
+            </p>
+
+            <div className="mt-8">
+              <button
+                type="button"
+                onClick={() => setShowCode((s) => !s)}
+                aria-expanded={showCode}
+                className="inline-flex items-center gap-1 text-[10px] md:text-xs font-medium uppercase hover:opacity-60"
+              >
+                Have a discount code?
+                <i
+                  aria-hidden
+                  className={`${showCode ? "ri-subtract-line" : "ri-add-line"} text-sm leading-none`}
+                ></i>
+              </button>
+
+              {showCode && (
+                <form onSubmit={applyCode} className="mt-4 flex gap-2">
+                  <input
+                    type="text"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    placeholder="Enter Code"
+                    aria-label="Discount code"
+                    className="min-w-0 flex-1 border border-zinc-300 bg-white px-3 py-2.5 text-[10px] md:text-xs uppercase outline-none placeholder:normal-case placeholder:text-zinc-400 focus:border-black"
+                  />
+                  <button
+                    type="submit"
+                    className="bg-black px-5 text-[10px] md:text-xs font-medium uppercase text-white transition-color hover:opacity-60"
+                  >
+                    Apply
+                  </button>
+                </form>
+              )}
+              {codeError && showCode && (
+                <p
+                  role="alert"
+                  className="mt-2 text-[10px] md:text-xs text-red-600"
+                >
+                  {codeError}
+                </p>
+              )}
+              {appliedCode && showCode && (
+                <p className="mt-2 text-[10px] md:text-xs text-green-600">
+                  Code {appliedCode} applied.
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-4 bg-gray-500 px-6 py-5 text-[10px] md:text-xs font-medium uppercase text-white">
+            {freeShipping
+              ? "You've unlocked free shipping."
+              : `Add ${rupiah(FREE_SHIPPING_FROM - subtotal)} more for free shipping.`}
+          </div>
+        </aside>
       </section>
     </main>
   );

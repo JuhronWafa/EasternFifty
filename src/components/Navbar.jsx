@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useCart } from "../context/CartContext";
 
 const menuItems = [
   { label: "Home", path: "/" },
@@ -55,6 +54,7 @@ const Navbar = () => {
               <li key={item.path}>
                 <NavLink
                   to={item.path}
+                  end={item.path === "/"}
                   className={(state) =>
                     `${linkClass(state)} md:text-xs lg:text-sm text-base font-medium`
                   }

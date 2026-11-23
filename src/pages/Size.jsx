@@ -494,7 +494,7 @@ const Size = () => {
           </p>
           {result ? (
             <div className="flex flex-col items-center">
-              <p className="mt-2 font-anton text-7 leading-none text-black md:text-8xl lg:text-9xl">
+              <p className="mt-2 font-anton text-7xl leading-none text-black md:text-8xl lg:text-9xl">
                 {SIZES[result.index]}
               </p>
               {result.altIndex !== null && (
@@ -579,7 +579,7 @@ const Size = () => {
           </p>
 
           <div className="mt-10 bg-black p-6 text-white md:p-8">
-            <h3 className="font-anton text-2xl md:text-3xl lg:text-4xl uppercase leading-none">
+            <h3 className="font-anton text-2xl md:text-3xl uppercase leading-none">
               A little room to move.
             </h3>
             <p className="mt-4 max-w-md text-xs md:text-sm text-zinc-400">

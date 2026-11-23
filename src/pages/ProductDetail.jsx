@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { products, formatRupiah } from "../data/products";
 import { useCart } from "../context/CartContext";
 
 function ProductDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { addItem } = useCart();
   const item = products.find((p) => String(p.id) === id);
 
   const [size, setSize] = useState(null);
@@ -12,6 +14,7 @@ function ProductDetail() {
   const [openMaterial, setOpenMaterial] = useState(false);
   const [error, setError] = useState("");
   const [zoom, setZoom] = useState({ active: false, x: 50, y: 50 });
+  const [added, setAdded] = useState(false);
 
   const canHover =
     typeof window !== "undefined" &&
@@ -52,14 +55,25 @@ function ProductDetail() {
     return true;
   };
 
+  const addToCart = () => {
+    addItem(item, {
+      size: size ?? "-",
+      color: item.variant,
+      qty,
+    });
+  };
+
   const handleAddToCart = () => {
     if (!validate()) return;
-    console.log("Add to cart:", { id: item.id, size, qty });
+    addToCart();
+    setAdded(true);
+    setTimeout(() => setAdded(false), 3000);
   };
 
   const handleBuyNow = () => {
     if (!validate()) return;
-    console.log("Buy now:", { id: item.id, size, qty });
+    addToCart();
+    navigate("/cart");
   };
 
   return (
@@ -191,7 +205,7 @@ function ProductDetail() {
                       setSize(s);
                       setError("");
                     }}
-                    className={`h-10 w-10 border text-xs transition-colors font-semibold ${size === s ? "border-gray-500 bg-gray-500 text-white" : "border-zinc-300 hover:border-black"}`}
+                    className={`h-10 w-10 border text-[10px] md:text-xs transition-colors font-semibold ${size === s ? "border-gray-500 bg-gray-500 text-white" : "border-zinc-300 hover:border-black"}`}
                   >
                     {s}
                   </button>
@@ -205,8 +219,8 @@ function ProductDetail() {
           {/* Stock */}
           <div className="mt-6 flex items-center justify-between text-xs md:text-sm">
             <span className="font-semibold">Stock</span>
-            <span className="text-[10px] font-medium text-yellow-500">
-              {(item.stock ?? 10) <= 5 ? "few pieces left" : "In stock"}
+            <span className="text-[10px] font-medium text-green-600">
+              {(item.stock ?? 10) <= 5 ? "few pieces left" : "In Stock"}
             </span>
           </div>
           {/* Stock */}
@@ -222,10 +236,10 @@ function ProductDetail() {
               >
                 -
               </button>
-              <span className="w-6 text-center font-semibold">{qty}</span>
+              <span className="w-6 text-[10px] md:text-xs text-center font-semibold">{qty}</span>
               <button
                 type="button"
-                onClick={() => setQty((q) => q + 1)}
+                onClick={() => setQty((q) => Math.min(10, q + 1))}
                 className="h-9 w-9 border border-zinc-300 hover:border-black"
               >
                 +
@@ -239,18 +253,26 @@ function ProductDetail() {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="flex items-center justify-between bg-gray-500 px-5 py-4 text-xs font-semibold uppercase text-white transition-colors hover:bg-zinc-800"
+              className="flex items-center justify-between bg-gray-500 px-5 py-4 text-[10px] md:text-xs font-semibold uppercase text-white transition-colors hover:bg-zinc-800"
             >
               Add to cart <i className="ri-arrow-right-line ri-lg"></i>
             </button>
             <button
               type="button"
               onClick={handleBuyNow}
-              className="border border-zinc-300 px-5 py-4 text-xs font-semibold uppercase transition-colors hover:bg-gray-500 hover:text-white"
+              className="border border-zinc-300 px-5 py-4 text-[10px] md:text-xs font-semibold uppercase transition-colors hover:bg-gray-500 hover:text-white"
             >
               Buy now
             </button>
           </div>
+          {added && (
+            <p className="mt-3 text-xs text-green-600">
+              Ditambahkan ke keranjang.{" "}
+              <Link to="/cart">
+                Lihat keranjang <i className="ri-arrow-right-up-line ri-lg"></i>
+              </Link>
+            </p>
+          )}
           {/* Tombol */}
         </div>
         {/* Info */}
