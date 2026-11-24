@@ -81,6 +81,7 @@ const Cart = () => {
 
   const applyCode = (e) => {
     e.preventDefault();
+    if (appliedCode) return;
     const clean = code.trim().toUpperCase();
     if (DISCOUNT_CODES[clean]) {
       setAppliedCode(clean);
@@ -93,6 +94,7 @@ const Cart = () => {
 
   return (
     <main className="px-6 py-6 md:px-10">
+      {/* Breadcrumb */}
       <nav className="text-xs uppercase tracking-widest text-zinc-500">
         <Link to="/" className="hover:text-black">
           <i className="ri-arrow-left-up-line ri-lg"></i> Home
@@ -127,7 +129,7 @@ const Cart = () => {
 
       <hr className="mt-6 border-zinc-300" />
 
-      <section className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+      <section className="mt-0 md:mt-6 grid gap-10 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
         {/* Daftar Produk */}
         <div>
           <div className="hidden grid-cols-[minmax(0,1fr)_140px_110px] border-b border-zinc-300 pb-4 md:grid">
@@ -142,11 +144,12 @@ const Cart = () => {
             {items.map((item) => (
               <li
                 key={item.lineId}
-                className="grid gap-4 border-b border-zinc-300 py-6 md:grid-cols-[minmax(0,1fr)_140px_110px] md:items-center"
+                className="grid grid-cols-[5rem_minmax(0,1fr)] gap-x-4 gap-y-2 border-b border-zinc-300 py-6 md:grid-cols-[minmax(0,1fr)_140px_110px] md:items-center md:gap-4"
               >
                 {/* Produk */}
-                <div className="flex gap-4 md:gap-5">
-                  <div className="aspect-3/4 w-24 shrink-0 bg-zinc-200 md:w-36">
+                <div className="contents md:flex md:gap-5">
+                  {/* Kolom gambar + Remove (HP) */}
+                  <div className="col-start-1 row-start-1 aspect-3/4 w-20 shrink-0 self-start bg-zinc-200 md:w-36">
                     <img
                       src={item.image}
                       alt={item.name}
@@ -154,7 +157,15 @@ const Cart = () => {
                     />
                   </div>
 
-                  <div className="flex min-w-0 flex-1 flex-col">
+                  <button
+                    type="button"
+                    onClick={() => removeItem(item.lineId)}
+                    className="mt-8 col-start-1 row-start-2 self-start justify-self-center whitespace-nowrap text-[10px] text-zinc-500 underline-offset-4 hover:text-red-600 md:hidden"
+                  >
+                    Remove <i className="ri-delete-bin-line ri-lg"></i>
+                  </button>
+
+                  <div className="col-start-2 row-start-1 flex min-w-0 flex-1 flex-col">
                     <h2 className="text-xs font-semibold md:text-sm">
                       {item.name}
                     </h2>
@@ -162,32 +173,44 @@ const Cart = () => {
                       {rupiah(item.price)}
                     </p>
 
-                    <div className="mt-4 grid max-w-xs grid-cols-2 gap-2">
+                    <div className="mt-2 md:mt-4 grid max-w-xs grid-cols-2 gap-2">
                       {item.size !== "-" && (
-                        <Select
-                          label={`Size for ${item.name}`}
-                          // prefix="Size : "
-                          value={item.size}
-                          options={item.sizes ?? SIZES}
-                          onChange={(v) => updateItem(item.lineId, { size: v })}
-                        />
+                        <div>
+                          <span className="mb-2 block text-[10px] font-semibold text-black md:text-xs">
+                            Size
+                          </span>
+                          <Select
+                            label={`Size for ${item.name}`}
+                            value={item.size}
+                            options={item.sizes ?? SIZES}
+                            onChange={(v) =>
+                              updateItem(item.lineId, { size: v })
+                            }
+                          />
+                        </div>
                       )}
                       {item.colors?.length > 0 && (
-                        <Select
-                          label={`Colour for ${item.name}`}
-                          value={item.color}
-                          options={item.colors}
-                          onChange={(v) =>
-                            updateItem(item.lineId, { color: v })
-                          }
-                        />
+                        <div>
+                          <span className="mb-2 block text-[10px] font-semibold text-black md:text-xs">
+                            Variant
+                          </span>
+                          <Select
+                            label={`Colour for ${item.name}`}
+                            value={item.color}
+                            options={item.colors}
+                            onChange={(v) =>
+                              updateItem(item.lineId, { color: v })
+                            }
+                          />
+                        </div>
                       )}
                     </div>
 
+                    {/* Remove versi desktop */}
                     <button
                       type="button"
                       onClick={() => removeItem(item.lineId)}
-                      className="mt-4 self-start text-[10px] md:text-xs text-zinc-500 underline-offset-4 hover:text-red-600 md:mt-auto"
+                      className="hidden self-start text-xs text-zinc-500 underline-offset-4 hover:text-red-600 md:mt-auto md:block"
                     >
                       Remove <i className="ri-delete-bin-line ri-lg"></i>
                     </button>
@@ -195,48 +218,57 @@ const Cart = () => {
                 </div>
 
                 {/* Quantity + Total */}
-                <div className="flex items-center justify-between md:contents">
-                  <div className="inline-flex h-8 w-fit items-center border border-zinc-300 bg-white">
-                    <button
-                      type="button"
-                      aria-label="Decrease quantity"
-                      disabled={item.qty <= 1}
-                      onClick={() =>
-                        updateItem(item.lineId, { qty: item.qty - 1 })
-                      }
-                      className="flex w-8 items-center justify-center
-                       hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-30"
-                    >
-                      <i
-                        aria-hidden
-                        className="ri-subtract-line text-sm leading-none"
-                      ></i>
-                    </button>
-                    <span
-                      className="flex w-8 items-center justify-center text-[10px] md:text-xs"
-                      aria-live="polite"
-                    >
-                      {item.qty}
+                <div className=" col-start-2 row-start-2 flex items-start justify-between md:contents">
+                  <div>
+                    <span className="mb-2 block text-[10px] font-semibold text-black md:hidden">
+                      Quantity
                     </span>
-                    <button
-                      type="button"
-                      aria-label="Increase quantity"
-                      disabled={item.qty >= MAX_QTY}
-                      onClick={() =>
-                        updateItem(item.lineId, { qty: item.qty + 1 })
-                      }
-                      className="flex w-8 items-center justify-center hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-30"
-                    >
-                      <i
-                        aria-hidden
-                        className="ri-add-line text-sm leading-none"
-                      ></i>
-                    </button>
+                    <div className="inline-flex h-8 w-fit items-center border border-zinc-300 bg-white">
+                      <button
+                        type="button"
+                        aria-label="Decrease quantity"
+                        disabled={item.qty <= 1}
+                        onClick={() =>
+                          updateItem(item.lineId, { qty: item.qty - 1 })
+                        }
+                        className="flex w-8 items-center justify-center hover:bg-zinc-200 disabled:cursor-not-allowed"
+                      >
+                        <i
+                          aria-hidden
+                          className="ri-subtract-line text-sm leading-none"
+                        ></i>
+                      </button>
+                      <span
+                        className="flex w-8 items-center justify-center text-[10px] md:text-xs"
+                        aria-live="polite"
+                      >
+                        {item.qty}
+                      </span>
+                      <button
+                        type="button"
+                        aria-label="Increase quantity"
+                        disabled={item.qty >= MAX_QTY}
+                        onClick={() =>
+                          updateItem(item.lineId, { qty: item.qty + 1 })
+                        }
+                        className="flex w-8 items-center justify-center hover:bg-zinc-200 disabled:cursor-not-allowed"
+                      >
+                        <i
+                          aria-hidden
+                          className="ri-add-line text-sm leading-none"
+                        ></i>
+                      </button>
+                    </div>
                   </div>
 
-                  <p className="text-xs md:text-sm font-medium md:text-right">
-                    {rupiah(item.price * item.qty)}
-                  </p>
+                  <div className="text-right">
+                    <span className="mb-2 block text-[10px] font-semibold text-black md:hidden">
+                      Total
+                    </span>
+                    <p className="flex h-8 items-center justify-end text-xs font-medium md:h-auto md:text-sm">
+                      {rupiah(item.price * item.qty)}
+                    </p>
+                  </div>
                 </div>
               </li>
             ))}
@@ -297,6 +329,7 @@ const Cart = () => {
 
             <Link
               to="/checkout"
+              state={{ discountCode: appliedCode }}
               className="mt-8 flex items-center justify-between bg-gray-500 px-5 py-4 text-[10px] md:text-xs font-medium uppercase text-white transition-colors hover:bg-zinc-800"
             >
               Checkout
@@ -309,7 +342,11 @@ const Cart = () => {
             <div className="mt-8">
               <button
                 type="button"
-                onClick={() => setShowCode((s) => !s)}
+                onClick={() => {
+                  setShowCode((s) => !s);
+                  setCodeError("");
+                  if (!appliedCode) setCode("");
+                }}
                 aria-expanded={showCode}
                 className="inline-flex items-center gap-1 text-[10px] md:text-xs font-medium uppercase hover:opacity-60"
               >
@@ -328,10 +365,12 @@ const Cart = () => {
                     onChange={(e) => setCode(e.target.value)}
                     placeholder="Enter Code"
                     aria-label="Discount code"
+                    disabled={!!appliedCode}
                     className="min-w-0 flex-1 border border-zinc-300 bg-white px-3 py-2.5 text-[10px] md:text-xs uppercase outline-none placeholder:normal-case placeholder:text-zinc-400 focus:border-black"
                   />
                   <button
                     type="submit"
+                    disabled={!!appliedCode}
                     className="bg-black px-5 text-[10px] md:text-xs font-medium uppercase text-white transition-color hover:opacity-60"
                   >
                     Apply

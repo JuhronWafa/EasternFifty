@@ -54,7 +54,9 @@ function Shop() {
         <span className="mx-2">/</span>
         <span className="text-black">Shop</span>
       </nav>
+      {/* Breadcrumb */}
 
+      {/* Header */}
       <h1 className="mt-4 font-anton text-3xl uppercase leading-none md:text-5xl lg:text-6xl">
         The Eastern Archive.
       </h1>
@@ -62,7 +64,7 @@ function Shop() {
         Crafted from the eastern tip of Kediri. Everyday streetwear made to
         outlast trends.
       </p>
-      {/* Breadcrumb */}
+      {/* Header */}
 
       <hr className="mt-6 border-zinc-300" />
 

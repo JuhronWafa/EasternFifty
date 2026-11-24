@@ -327,7 +327,7 @@ const Diagram = ({ type }) => {
 };
 
 const fieldCls =
-  "w-full border border-zinc-300 bg-white px-4 py-3 pr-12 text-xs md:text-sm text-black outline-none transition-colors placeholder:text-zinc-400 focus:border-black";
+  "w-full border border-zinc-300 bg-white px-4 py-3 pr-12 text-xs md:text-sm text-black outline-none transition-colors placeholder:text-zinc-400 focus:border-black/50";
 const labelCls =
   "text-[10px] font-medium uppercase tracking-wide text-zinc-500";
 
@@ -536,7 +536,7 @@ const Size = () => {
                   key={u}
                   type="button"
                   onClick={() => setUnit(u)}
-                  className={`px-6 py-2.5 uppercase transition-colors ${unit === u ? "bg-black text-white" : "text-zinc-500"}`}
+                  className={`px-6 py-2.5 uppercase transition-colors ${unit === u ? "bg-black text-white" : "text-black"}`}
                 >
                   {u}
                 </button>

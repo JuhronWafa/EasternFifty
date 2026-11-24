@@ -205,7 +205,7 @@ function ProductDetail() {
                       setSize(s);
                       setError("");
                     }}
-                    className={`h-10 w-10 border text-[10px] md:text-xs transition-colors font-semibold ${size === s ? "border-gray-500 bg-gray-500 text-white" : "border-zinc-300 hover:border-black"}`}
+                    className={`h-10 w-10 border text-[10px] md:text-xs transition-colors font-semibold ${size === s ? "border-gray-500 bg-gray-500 text-white" : "border-zinc-300 hover:border-black bg-white"}`}
                   >
                     {s}
                   </button>
@@ -232,15 +232,17 @@ function ProductDetail() {
               <button
                 type="button"
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
-                className="h-9 w-9 border border-zinc-300 hover:border-black"
+                className="h-9 w-9 border bg-white border-zinc-300 hover:border-black"
               >
                 -
               </button>
-              <span className="w-6 text-[10px] md:text-xs text-center font-semibold">{qty}</span>
+              <span className="w-6 text-[10px] md:text-xs text-center font-semibold">
+                {qty}
+              </span>
               <button
                 type="button"
                 onClick={() => setQty((q) => Math.min(10, q + 1))}
-                className="h-9 w-9 border border-zinc-300 hover:border-black"
+                className="h-9 w-9 border bg-white border-zinc-300 hover:border-black"
               >
                 +
               </button>
@@ -260,7 +262,7 @@ function ProductDetail() {
             <button
               type="button"
               onClick={handleBuyNow}
-              className="border border-zinc-300 px-5 py-4 text-[10px] md:text-xs font-semibold uppercase transition-colors hover:bg-gray-500 hover:text-white"
+              className="border bg-white border-zinc-300 px-5 py-4 text-[10px] md:text-xs font-semibold uppercase transition-colors hover:border-black/50"
             >
               Buy now
             </button>

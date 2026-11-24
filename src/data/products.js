@@ -1,5 +1,5 @@
 export const formatRupiah = (n) =>
-  "IDR " +
+  "Rp " +
   Math.round(n)
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
