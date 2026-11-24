@@ -387,6 +387,105 @@ const Checkout = () => {
             ))}
           </div>
         </form>
+        {/* form */}
+
+        {/* Ringkasan */}
+        <aside className="self-start">
+          <div className="bg-zinc-200 p-6 md:p-8">
+            <h2 className="font-anton text-2xl uppercase leading-none md:text-3xl">
+              Your order.
+            </h2>
+
+            <ul className="mt-6">
+              {items.map((item) => (
+                <li
+                  key={item.lineId}
+                  className="flex gap-6 border-b border-zinc-300 py-4"
+                >
+                  <div className="relative aspect-3/4 w-14 shrink-0 bg-zinc-300">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="h-full w-full object-cover"
+                    />
+                    <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center bg-black px-1 text-[10px] text-white">
+                      {item.qty}
+                    </span>
+                  </div>
+                  <div className="flex min-w-0 flex-1 justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-xs font-medium md:text-sm">
+                        {item.name}
+                      </p>
+                      <p className="mt-1 text-[10px] md:text-xs text-zinc-500">
+                        {[
+                          item.size !== "-" ? `Size ${item.size}` : null,
+                          item.color,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </p>
+                    </div>
+                    <p className="shrink-0 text-xs md:text-sm">
+                      {rupiah(item.price * item.qty)}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <dl className="mt-6 space-y-4 text-xs md:text-sm">
+              <div className="flex justify-between">
+                <dt>Subtotal</dt>
+                <dd>{rupiah(subtotal)}</dd>
+              </div>
+              {discount > 0 && (
+                <div className="flex justify-between">
+                  <dt>Discount ({discountCode})</dt>
+                  <dd>-{rupiah(discount)}</dd>
+                </div>
+              )}
+              <div className="flex justify-between">
+                <dt>{selectedDelivery.title} shipping</dt>
+                <dd className={shipping === 0 ? "text-xs font-medium" : ""}>
+                  {shipping === 0 ? "FREE" : rupiah(shipping)}
+                </dd>
+              </div>
+            </dl>
+
+            <div className="mt-6 flex items-baseline justify-between border-t border-zinc-300 pt-6">
+              <span className="text-xs font-medium uppercase">Total</span>
+              <span className="font-anton text-2xl leading-none md:text-3xl">
+                {rupiah(total)}
+              </span>
+            </div>
+            <p className="mt-4 text-[10px] md:text-xs text-zinc-500">
+              Taxes included. No surprises at the final whistle.
+            </p>
+
+            {Object.values(errors).some(Boolean) && (
+              <p
+                role="alert"
+                className="mt-4 text[10px] md:text-xs text-red-600"
+              >
+                Please check the highlighted fields.
+              </p>
+            )}
+
+            <button
+              type="submit"
+              form="checkout-form"
+              className="mt-8 flex w-full items-center justify-between bg-gray-500 px-5 py-5 text-[10px] md:text-xs font-medium uppercase text-white transition-colors hover:bg-zinc-800"
+            >
+              Place order
+              <i aria-hidden className="ri-arrow-right-up-line ri-lg"></i>
+            </button>
+            <p className="mt-3 text-[10px] md:text-xs text-zinc-500">
+              Secure checkout / Jago · Gopay · QRIS
+            </p>
+          </div>
+        </aside>
+        {/* Ringkasan */}
       </section>
     </main>
   );
