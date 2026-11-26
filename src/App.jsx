@@ -9,6 +9,7 @@ import Size from "./pages/Size.jsx";
 import Cart from "./pages/Cart.jsx";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess.jsx";
+import Tracking from "./pages/Tracking.jsx";
 
 function App() {
   const location = useLocation();
@@ -43,6 +44,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/tracking" element={<Tracking />} />
         </Routes>
         <Footer />
       </div>

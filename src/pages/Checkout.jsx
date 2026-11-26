@@ -189,9 +189,13 @@ const Checkout = () => {
       return;
     }
 
+    const createdAt = new Date().toISOString();
+
     const order = {
       number: makeOrderNumber(),
-      createdAt: new Date().toISOString(),
+      createdAt,
+      status: "pending_payment",
+      history: [{ status: "pending_payment", at: createdAt }],
       customer: {
         email: form.email.trim(),
         phone: form.phone.trim(),

@@ -291,7 +291,7 @@ const Cart = () => {
         </div>
         {/* Club Promise */}
 
-        {/* Ringkasa */}
+        {/* Ringkasan */}
         <aside className="self-start">
           <div className="bg-zinc-200 p-6 md:p-8">
             <h2 className="font-anton text-2xl uppercase leading-none md:text-3xl">
