@@ -20,6 +20,6 @@ export const PAYMENT_METHODS = {
     id: "qris",
     title: "QRIS",
     type: "qris",
-    image: "/assets/payment/qris.png", // ← gambar QRIS kamu
+    image: "/assets/payment/kris.png", // ← gambar QRIS
   },
 };

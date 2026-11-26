@@ -145,6 +145,7 @@ const OrderSuccess = () => {
               Pay {rupiah(order.total)} via {order.payment}, then send your
               proof of payment on WhatsaApp so we can confirm your order.
             </p>
+            {/* Intruksi Pembayaran */}
 
             {method && (
               <div className="mt-6 border border-zinc-800 px-4 py-2">
@@ -245,8 +246,99 @@ const OrderSuccess = () => {
               </div>
             )}
           </dl>
-          
+          {/* Detail Pesanan */}
+
+          {/* Barang */}
+          <p className={`${labelCls} mt-10`}>Your kit</p>
+          <ul className="mt-3 border-t border-zinc-300">
+            {order.items.map((item, i) => (
+              <li
+                key={`${item.name}-${item.size}-${item.color}-${i}`}
+                className="flex gap-4 border-b border-zinc-300 py-4"
+              >
+                <div className="aspect-3/4 w-16 shrink-0 bg-zinc-200">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <div className="flex min-w-0 flex-1 justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold md:text-sm">
+                      {item.name}
+                    </p>
+                    <p className="mt-1 text-[10px] md:text-xs text-zinc-500">
+                      {[
+                        item.size !== "-" ? `Size ${item.size}` : null,
+                        item.color,
+                        `Qty ${item.qty}`,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </p>
+                  </div>
+                  <p className="shrink-0 text-xs md:text-sm font-medium">
+                    {rupiah(item.price * item.qty)}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
+        {/* Barang */}
+
+        {/* Ringkasan */}
+        <aside className="self-start">
+          <div className="bg-zinc-200 p-6 md:p-8">
+            <h2 className="font-anton text-2xl uppercase leading-none md:text-3xl">
+              The final score.
+            </h2>
+
+            <dl className="mt-8 space-y-4 text-xs md:text-sm">
+              <div className="flex justify-between">
+                <dt>Subtotal</dt>
+                <dd>{rupiah(order.subtotal)}</dd>
+              </div>
+              {order.discount > 0 && (
+                <div className="flex justify-between">
+                  <dt>Discount ({order.discountCode})</dt>
+                  <dd>-{rupiah(order.discount)}</dd>
+                </div>
+              )}
+              <div className="flex justify-between">
+                <dt>{order.delivery.title} shipping</dt>
+                <dd
+                  className={order.shipping === 0 ? "text-xs font-medium" : ""}
+                >
+                  {order.shipping === 0 ? "FREE" : rupiah(order.shipping)}
+                </dd>
+              </div>
+            </dl>
+
+            <div className="mt-6 flex items-baseline justify-between border-t border-zinc-300 pt-6">
+              <span className="text-xs font-medium uppercase">Total</span>
+              <span className="font-anton text-2xl leading-none md:text-3xl">
+                {rupiah(order.total)}
+              </span>
+            </div>
+
+            <Link
+              to="/tracking"
+              className="mt-8 flex items-center justify-between bg-gray-500 px-5 py-4 text-[10px] md:text-xs font-medium uppercase text-white transition-colors hover:bg-zinc-800"
+            >
+              Track your order
+              <i aria-hidden className="ri-arrow-right-up-line ri-lg"></i>
+            </Link>
+            <Link
+              to="/shop"
+              className="mt-3 flex items-center justify-between border border-zinc-300 bg-white px-5 py-4 text-[10px] md:text-xs font-medium uppercase transition-colors hover:bg-gray-500 hover:text-white"
+            >
+              Continue shopping
+              <i aria-hidden className="ri-arrow-right-up-line ri-lg"></i>
+            </Link>
+          </div>
+        </aside>
       </section>
     </main>
   );
