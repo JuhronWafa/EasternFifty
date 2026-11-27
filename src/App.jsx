@@ -10,6 +10,7 @@ import Cart from "./pages/Cart.jsx";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess.jsx";
 import Tracking from "./pages/Tracking.jsx";
+import Account from "./pages/Account.jsx";
 
 function App() {
   const location = useLocation();
@@ -45,6 +46,7 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/tracking" element={<Tracking />} />
+          <Route path="/account" element={<Account />} />
         </Routes>
         <Footer />
       </div>

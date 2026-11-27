@@ -1,6 +1,6 @@
 import { href, Link, useLocation } from "react-router-dom";
 
-const HIDDEN_ON = ["/account"];
+// const HIDDEN_ON = ["/account"];
 
 const columns = [
   {
@@ -41,7 +41,7 @@ const linkCls =
 const Footer = () => {
   const { pathname } = useLocation();
 
-  if (HIDDEN_ON.some((p) => pathname.startsWith(p))) return null;
+  // if (HIDDEN_ON.some((p) => pathname.startsWith(p))) return null;
   return (
     <footer className="mt-12 bg-black text-zinc-100">
       <div className="grid grid-cols-1 gap-12 px-6 pb-14 pt-12 md:grid-cols-[minmax(0,2.4fr)_1fr_1fr_1fr] md:px-12">
